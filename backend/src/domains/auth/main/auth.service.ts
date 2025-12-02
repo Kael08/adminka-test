@@ -7,4 +7,8 @@ export class AuthService {
     async sendCode():Promise<string> {
         return "code"
     }
+
+    async verifyCode(): Promise<string>{
+        return "code"
+    }
 }
