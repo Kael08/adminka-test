@@ -4,10 +4,10 @@ import { AuthService } from "./main/auth.service";
 @Injectable()
 export class AuthPublicService{
     constructor(
-        private readonly authService: AuthService
+        private readonly authService: AuthService,
     ){}
 
-    async sendCode(): Promise<string>{
-        return await this.authService.sendCode()
+    async sendCode(phone: string): Promise<{message: string}>{
+        return await this.authService.sendCode(phone)
     }
 }

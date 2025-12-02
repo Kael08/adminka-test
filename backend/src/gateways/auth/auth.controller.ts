@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Body } from '@nestjs/common';
 import { AuthPublicService } from 'src/domains/auth/public.service';
+import { AuthPhoneDto } from './dto/auth-phone.dto';
 
 @Controller('/auth/send-code')
 export class AuthController {
@@ -8,9 +9,9 @@ export class AuthController {
     ) {}
 
     @Get()
-    async sendCode(){
-        return{
-            code: await this.service.sendCode()
-        }
+    async sendCode(
+        @Body() dto: AuthPhoneDto
+    ) {
+        return await this.service.sendCode(dto.phone)
     }
 }
