@@ -26,5 +26,15 @@ export class UsersService{
         return await this.userRepository.findOneBy({phone})
     }
 
-    
+    async verifyCode(phone:string, code: string): Promise<UsersEntity | null>{
+        const user = await this.findOneByPhone(phone)
+
+        if(!user){
+            return null
+        }
+
+        if(await bcrypt.compare(code,user.codeHash))
+            return user
+        else return null
+    }
 }

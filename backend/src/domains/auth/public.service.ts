@@ -10,4 +10,8 @@ export class AuthPublicService{
     async sendCode(phone: string): Promise<{message: string}>{
         return await this.authService.sendCode(phone)
     }
+
+    async verifyCode(phone:string,code:string): Promise<string>{
+        return await this.authService.verifyCode(phone,code)
+    }
 }

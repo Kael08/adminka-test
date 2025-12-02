@@ -1,11 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { 
+    Injectable,
+    UnauthorizedException,
+ } from '@nestjs/common';
 import { UsersPublicService } from 'src/domains/users/public.service';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly usersPublicService: UsersPublicService,
+        private readonly jwtService: JwtService,
     ){}
 
     async sendCode(phone: string):Promise<{message: string}> {
@@ -21,8 +26,21 @@ export class AuthService {
         }
     }
 
-    async verifyCode(): Promise<string>{
-        return "code"
+    async verifyCode(phone: string, code: string): Promise<string>{
+        const user = await this.usersPublicService.verifyCode(phone,code)
+
+        if(!user){
+            throw new UnauthorizedException('Invalid or expired code')
+        }
+
+        const payload = {
+            id: user.id,
+            phone: user.phone
+        }
+
+        const accessToken = this.jwtService.sign(payload, {})
+
+        return accessToken
     }
 
     private generateCode():string{
